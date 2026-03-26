@@ -4,8 +4,13 @@ const app = express();
 
 app.get("/user", (req, res) => {
   const userId = req.query.id;
-  const sql = "SELECT * FROM users WHERE id = " + userId;
-  res.send("Query: " + sql);
+
+  if (!/^\d+$/.test(userId)) {
+    return res.status(400).send("Invalid user id");
+  }
+
+  const sql = "SELECT * FROM users WHERE id = ?";
+  res.send("Parameterized query would be used safely here");
 });
 
 app.get("/", (req, res) => {
